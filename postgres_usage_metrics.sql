@@ -164,7 +164,7 @@ SELECT
 FROM pg_class c
 JOIN pg_namespace n ON c.relnamespace = n.oid
 JOIN pg_roles r ON c.relowner = r.oid
-JOIN pg_database d ON d.oid = CURRENT_DATABASE()
+JOIN pg_database d ON d.oid = (SELECT oid FROM pg_database WHERE datname = CURRENT_DATABASE())
 WHERE c.relkind = 'r' -- Regular tables only
   AND n.nspname NOT IN ('pg_catalog', 'information_schema')
 ON CONFLICT (log_date, database_name, schema_name, table_name) DO NOTHING;
